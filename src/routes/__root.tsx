@@ -72,11 +72,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "EduAdapt — Agente Pedagógico Inteligente" },
+      {
+        name: "description",
+        content:
+          "EduAdapt es un agente pedagógico inteligente que personaliza el aprendizaje de Tecnología e Informática para grado séptimo mediante IA, DUA y mediación socrática.",
+      },
+      { name: "author", content: "EduAdapt" },
+      { property: "og:title", content: "EduAdapt — Agente Pedagógico Inteligente" },
+      {
+        property: "og:description",
+        content: "Rutas de aprendizaje personalizadas con IA para estudiantes de grado 7°.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
