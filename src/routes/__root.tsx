@@ -87,6 +87,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "EduAdapt — Agente Pedagógico Inteligente" },
+      { name: "description", content: "EduAdapt is an AI pedagogical agent personalizing learning for 7th graders in Technology and Informatics." },
+      { property: "og:description", content: "EduAdapt is an AI pedagogical agent personalizing learning for 7th graders in Technology and Informatics." },
+      { name: "twitter:description", content: "EduAdapt is an AI pedagogical agent personalizing learning for 7th graders in Technology and Informatics." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/60d97526-b5c3-46f2-b255-38658c8dbdfb/id-preview-ade8faa7--d8bc8847-56e2-43af-ada7-44d00b979860.lovable.app-1779136112725.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/60d97526-b5c3-46f2-b255-38658c8dbdfb/id-preview-ade8faa7--d8bc8847-56e2-43af-ada7-44d00b979860.lovable.app-1779136112725.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
