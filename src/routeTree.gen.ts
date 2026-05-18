@@ -9,9 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as EstudianteRouteImport } from './routes/estudiante'
+import { Route as DocenteRouteImport } from './routes/docente'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
+const EstudianteRoute = EstudianteRouteImport.update({
+  id: '/estudiante',
+  path: '/estudiante',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocenteRoute = DocenteRouteImport.update({
+  id: '/docente',
+  path: '/docente',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -25,32 +37,54 @@ const ApiChatRoute = ApiChatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/docente': typeof DocenteRoute
+  '/estudiante': typeof EstudianteRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/docente': typeof DocenteRoute
+  '/estudiante': typeof EstudianteRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/docente': typeof DocenteRoute
+  '/estudiante': typeof EstudianteRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/chat'
+  fullPaths: '/' | '/docente' | '/estudiante' | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/chat'
-  id: '__root__' | '/' | '/api/chat'
+  to: '/' | '/docente' | '/estudiante' | '/api/chat'
+  id: '__root__' | '/' | '/docente' | '/estudiante' | '/api/chat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DocenteRoute: typeof DocenteRoute
+  EstudianteRoute: typeof EstudianteRoute
   ApiChatRoute: typeof ApiChatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/estudiante': {
+      id: '/estudiante'
+      path: '/estudiante'
+      fullPath: '/estudiante'
+      preLoaderRoute: typeof EstudianteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docente': {
+      id: '/docente'
+      path: '/docente'
+      fullPath: '/docente'
+      preLoaderRoute: typeof DocenteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -70,8 +104,20 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DocenteRoute: DocenteRoute,
+  EstudianteRoute: EstudianteRoute,
   ApiChatRoute: ApiChatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
