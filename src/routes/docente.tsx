@@ -9,6 +9,7 @@ import {
   Eye,
   EyeOff,
   PlusCircle,
+  Pencil,
   Trash2,
   Users,
   TrendingUp,
@@ -41,13 +42,17 @@ function TeacherPage() {
     setAllProgress(store.getAllProgress());
     setLogs(store.getLogs());
   };
-  useEffect(() => { refresh(); }, []);
+  useEffect(() => {
+    refresh();
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-10 border-b border-border bg-background/85 backdrop-blur">
         <div className="container mx-auto flex items-center justify-between px-6 py-4">
-          <Link to="/"><EduLogo /></Link>
+          <Link to="/">
+            <EduLogo />
+          </Link>
           <div className="hidden items-center gap-2 text-sm text-muted-foreground sm:flex">
             <ShieldCheck className="h-4 w-4 text-success" /> Modo docente
           </div>
@@ -82,7 +87,13 @@ function TeacherPage() {
           <Dashboard students={students} allProgress={allProgress} lessons={lessons} />
         )}
         {tab === "lessons" && (
-          <LessonsManager lessons={lessons} onChange={(l) => { store.saveLessons(l); refresh(); }} />
+          <LessonsManager
+            lessons={lessons}
+            onChange={(l) => {
+              store.saveLessons(l);
+              refresh();
+            }}
+          />
         )}
         {tab === "students" && (
           <StudentsManager students={students} allProgress={allProgress} lessons={lessons} />
@@ -121,13 +132,17 @@ function Dashboard({
       studentsCount: students.length,
       lessonsActive: lessons.filter((l) => l.enabled).length,
       completed: completed.length,
-      avgMot, avgAut, avgPost,
+      avgMot,
+      avgAut,
+      avgPost,
     };
   }, [students, allProgress, lessons]);
 
   const perLesson = useMemo(() => {
     return lessons.map((l) => {
-      const entries = Object.values(allProgress).map((p) => p[l.id]).filter(Boolean);
+      const entries = Object.values(allProgress)
+        .map((p) => p[l.id])
+        .filter(Boolean);
       const done = entries.filter((e) => e.completedAt).length;
       const avgScore = avg(entries.map((e) => e.postTestScore ?? 0));
       return { lesson: l, attempts: entries.length, completed: done, avgScore };
@@ -138,15 +153,31 @@ function Dashboard({
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <KPI icon={<Users className="h-5 w-5" />} label="Estudiantes" value={stats.studentsCount} />
-        <KPI icon={<BookOpen className="h-5 w-5" />} label="Lecciones activas" value={stats.lessonsActive} />
-        <KPI icon={<CheckCircle2 className="h-5 w-5" />} label="Lecciones completadas" value={stats.completed} />
-        <KPI icon={<TrendingUp className="h-5 w-5" />} label="Promedio post-test" value={`${Math.round(stats.avgPost)}%`} />
+        <KPI
+          icon={<BookOpen className="h-5 w-5" />}
+          label="Lecciones activas"
+          value={stats.lessonsActive}
+        />
+        <KPI
+          icon={<CheckCircle2 className="h-5 w-5" />}
+          label="Lecciones completadas"
+          value={stats.completed}
+        />
+        <KPI
+          icon={<TrendingUp className="h-5 w-5" />}
+          label="Promedio post-test"
+          value={`${Math.round(stats.avgPost)}%`}
+        />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Panel title="Motivación y autonomía promedio">
           <div className="space-y-5 py-2">
-            <Gauge label="Motivación" value={Math.round(stats.avgMot)} color="var(--color-primary)" />
+            <Gauge
+              label="Motivación"
+              value={Math.round(stats.avgMot)}
+              color="var(--color-primary)"
+            />
             <Gauge label="Autonomía" value={Math.round(stats.avgAut)} color="var(--color-accent)" />
             <Gauge label="Dominio" value={Math.round(stats.avgPost)} color="var(--color-success)" />
           </div>
@@ -178,11 +209,21 @@ function Dashboard({
   );
 }
 
-function KPI({ icon, label, value }: { icon: React.ReactNode; label: string; value: React.ReactNode }) {
+function KPI({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: React.ReactNode;
+}) {
   return (
     <div className="rounded-2xl border border-border bg-card p-5 shadow-card">
       <div className="flex items-center justify-between">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-primary">{icon}</div>
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-primary">
+          {icon}
+        </div>
       </div>
       <div className="mt-4 text-sm text-muted-foreground">{label}</div>
       <div className="font-display text-3xl font-bold">{value}</div>
@@ -215,7 +256,13 @@ function Panel({ title, children }: { title: string; children: React.ReactNode }
 
 // ---------- Lessons Manager ----------
 
-function LessonsManager({ lessons, onChange }: { lessons: Lesson[]; onChange: (l: Lesson[]) => void }) {
+function LessonsManager({
+  lessons,
+  onChange,
+}: {
+  lessons: Lesson[];
+  onChange: (l: Lesson[]) => void;
+}) {
   const [draft, setDraft] = useState<Lesson | null>(null);
 
   const toggle = (id: string) =>
@@ -230,10 +277,17 @@ function LessonsManager({ lessons, onChange }: { lessons: Lesson[]; onChange: (l
     setDraft(null);
   };
 
+  const visible = lessons.filter((l) => l.enabled).length;
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="font-display text-xl font-semibold">Lecciones</h2>
+        <div>
+          <h2 className="font-display text-xl font-semibold">Lecciones del currículo</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {lessons.length} lecciones · {visible} visibles para estudiantes
+          </p>
+        </div>
         <div className="flex gap-2">
           <button
             onClick={() => onChange(DEFAULT_LESSONS)}
@@ -263,47 +317,68 @@ function LessonsManager({ lessons, onChange }: { lessons: Lesson[]; onChange: (l
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-card">
-        <table className="w-full text-sm">
-          <thead className="border-b border-border bg-secondary/40 text-left text-xs uppercase tracking-wider text-muted-foreground">
-            <tr>
-              <th className="px-4 py-3">Lección</th>
-              <th className="px-4 py-3">Dificultad</th>
-              <th className="px-4 py-3">Estado</th>
-              <th className="px-4 py-3 text-right">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lessons.map((l) => (
-              <tr key={l.id} className="border-b border-border last:border-0">
-                <td className="px-4 py-3">
-                  <div className="font-medium">{l.title}</div>
-                  <div className="text-xs text-muted-foreground line-clamp-1">{l.objective}</div>
-                </td>
-                <td className="px-4 py-3">
-                  <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs">{["Inicial","Intermedio","Avanzado"][l.difficulty-1]}</span>
-                </td>
-                <td className="px-4 py-3">
-                  <button
-                    onClick={() => toggle(l.id)}
-                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${
-                      l.enabled ? "bg-success/15 text-success" : "bg-secondary text-muted-foreground"
-                    }`}
-                  >
-                    {l.enabled ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
-                    {l.enabled ? "Visible" : "Oculta"}
-                  </button>
-                </td>
-                <td className="px-4 py-3 text-right">
-                  <button onClick={() => setDraft(l)} className="rounded-md px-2 py-1 text-xs text-primary hover:bg-secondary">Editar</button>
-                  <button onClick={() => remove(l.id)} className="rounded-md p-1.5 text-destructive hover:bg-destructive/10">
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {lessons.map((l, i) => {
+          const diff = DIFF_META[l.difficulty];
+          return (
+            <div
+              key={l.id}
+              className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-card p-5 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-glow ${
+                l.enabled ? "border-border" : "border-dashed border-border opacity-70"
+              }`}
+            >
+              <div className={`absolute inset-x-0 top-0 h-1 ${diff.bar}`} />
+              <div className="mb-3 flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-secondary font-display text-sm font-bold text-primary">
+                    {String(i + 1).padStart(2, "0")}
+                  </div>
+                  <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${diff.cls}`}>
+                    {diff.label}
+                  </span>
+                </div>
+                <button
+                  onClick={() => toggle(l.id)}
+                  title={l.enabled ? "Ocultar a estudiantes" : "Mostrar a estudiantes"}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
+                    l.enabled ? "bg-success/15 text-success" : "bg-secondary text-muted-foreground"
+                  }`}
+                >
+                  {l.enabled ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
+                  {l.enabled ? "Visible" : "Oculta"}
+                </button>
+              </div>
+
+              <h3 className="font-display text-base font-semibold leading-snug">{l.title}</h3>
+              <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                {l.objective || "Sin objetivo definido."}
+              </p>
+
+              {l.competency && (
+                <div className="mt-3 flex items-start gap-1.5 rounded-lg bg-secondary/50 px-2.5 py-1.5 text-xs text-muted-foreground">
+                  <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+                  <span className="line-clamp-2">{l.competency}</span>
+                </div>
+              )}
+
+              <div className="mt-4 flex items-center gap-2 border-t border-border pt-3">
+                <button
+                  onClick={() => setDraft(l)}
+                  className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                >
+                  <Pencil className="h-3.5 w-3.5" /> Editar
+                </button>
+                <button
+                  onClick={() => remove(l.id)}
+                  title="Eliminar lección"
+                  className="rounded-lg border border-border p-2 text-destructive transition-colors hover:bg-destructive/10"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {draft && <LessonEditor draft={draft} onSave={save} onCancel={() => setDraft(null)} />}
@@ -311,7 +386,21 @@ function LessonsManager({ lessons, onChange }: { lessons: Lesson[]; onChange: (l
   );
 }
 
-function LessonEditor({ draft, onSave, onCancel }: { draft: Lesson; onSave: (l: Lesson) => void; onCancel: () => void }) {
+const DIFF_META = {
+  1: { label: "Inicial", cls: "bg-success/15 text-success", bar: "bg-success/60" },
+  2: { label: "Intermedio", cls: "bg-warning/20 text-warning-foreground", bar: "bg-warning/70" },
+  3: { label: "Avanzado", cls: "bg-destructive/15 text-destructive", bar: "bg-destructive/60" },
+} as const;
+
+function LessonEditor({
+  draft,
+  onSave,
+  onCancel,
+}: {
+  draft: Lesson;
+  onSave: (l: Lesson) => void;
+  onCancel: () => void;
+}) {
   const [l, setL] = useState<Lesson>(draft);
   const set = <K extends keyof Lesson>(k: K, v: Lesson[K]) => setL({ ...l, [k]: v });
   return (
@@ -319,33 +408,84 @@ function LessonEditor({ draft, onSave, onCancel }: { draft: Lesson; onSave: (l: 
       <div className="w-full max-w-2xl rounded-2xl border border-border bg-card p-6 shadow-glow">
         <h3 className="font-display text-lg font-semibold">Editar lección</h3>
         <div className="mt-4 grid gap-3">
-          <Field label="Título"><input value={l.title} onChange={(e) => set("title", e.target.value)} className={INP} /></Field>
-          <Field label="Objetivo"><textarea value={l.objective} onChange={(e) => set("objective", e.target.value)} rows={2} className={INP} /></Field>
-          <Field label="Competencia MEN"><input value={l.competency} onChange={(e) => set("competency", e.target.value)} className={INP} /></Field>
+          <Field label="Título">
+            <input value={l.title} onChange={(e) => set("title", e.target.value)} className={INP} />
+          </Field>
+          <Field label="Objetivo">
+            <textarea
+              value={l.objective}
+              onChange={(e) => set("objective", e.target.value)}
+              rows={2}
+              className={INP}
+            />
+          </Field>
+          <Field label="Competencia MEN">
+            <input
+              value={l.competency}
+              onChange={(e) => set("competency", e.target.value)}
+              className={INP}
+            />
+          </Field>
           <Field label="Dificultad">
-            <select value={l.difficulty} onChange={(e) => set("difficulty", Number(e.target.value) as 1|2|3)} className={INP}>
+            <select
+              value={l.difficulty}
+              onChange={(e) => set("difficulty", Number(e.target.value) as 1 | 2 | 3)}
+              className={INP}
+            >
               <option value={1}>Inicial</option>
               <option value={2}>Intermedio</option>
               <option value={3}>Avanzado</option>
             </select>
           </Field>
           <div className="grid gap-3 sm:grid-cols-2">
-            <Field label="Pregunta pre-test"><input value={l.preTestQuestion} onChange={(e) => set("preTestQuestion", e.target.value)} className={INP} /></Field>
-            <Field label="Palabra clave esperada"><input value={l.preTestAnswer} onChange={(e) => set("preTestAnswer", e.target.value)} className={INP} /></Field>
-            <Field label="Pregunta post-test"><input value={l.postTestQuestion} onChange={(e) => set("postTestQuestion", e.target.value)} className={INP} /></Field>
-            <Field label="Palabra clave esperada"><input value={l.postTestAnswer} onChange={(e) => set("postTestAnswer", e.target.value)} className={INP} /></Field>
+            <Field label="Pregunta pre-test">
+              <input
+                value={l.preTestQuestion}
+                onChange={(e) => set("preTestQuestion", e.target.value)}
+                className={INP}
+              />
+            </Field>
+            <Field label="Palabra clave esperada">
+              <input
+                value={l.preTestAnswer}
+                onChange={(e) => set("preTestAnswer", e.target.value)}
+                className={INP}
+              />
+            </Field>
+            <Field label="Pregunta post-test">
+              <input
+                value={l.postTestQuestion}
+                onChange={(e) => set("postTestQuestion", e.target.value)}
+                className={INP}
+              />
+            </Field>
+            <Field label="Palabra clave esperada">
+              <input
+                value={l.postTestAnswer}
+                onChange={(e) => set("postTestAnswer", e.target.value)}
+                className={INP}
+              />
+            </Field>
           </div>
         </div>
         <div className="mt-6 flex justify-end gap-2">
-          <button onClick={onCancel} className="rounded-lg border border-border px-4 py-2 text-sm">Cancelar</button>
-          <button onClick={() => onSave(l)} className="rounded-lg gradient-hero px-4 py-2 text-sm font-medium text-white shadow-glow">Guardar</button>
+          <button onClick={onCancel} className="rounded-lg border border-border px-4 py-2 text-sm">
+            Cancelar
+          </button>
+          <button
+            onClick={() => onSave(l)}
+            className="rounded-lg gradient-hero px-4 py-2 text-sm font-medium text-white shadow-glow"
+          >
+            Guardar
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-const INP = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20";
+const INP =
+  "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-ring/20";
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
@@ -390,19 +530,27 @@ function StudentsManager({
               </div>
             </div>
             <div className="mt-5 space-y-3">
-              <Gauge label="Dominio promedio" value={Math.round(avgScore)} color="var(--color-success)" />
+              <Gauge
+                label="Dominio promedio"
+                value={Math.round(avgScore)}
+                color="var(--color-success)"
+              />
               <Gauge label="Autonomía" value={Math.round(avgAut)} color="var(--color-primary)" />
               <Gauge label="Motivación" value={Math.round(avgMot)} color="var(--color-accent)" />
             </div>
             <div className="mt-5 border-t border-border pt-4">
-              <div className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">Lecciones</div>
+              <div className="mb-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                Lecciones
+              </div>
               <div className="space-y-1.5">
                 {lessons.map((l) => {
                   const e = p[l.id];
                   return (
                     <div key={l.id} className="flex items-center justify-between text-sm">
                       <span className="truncate">{l.title}</span>
-                      <span className={`text-xs ${e?.completedAt ? "text-success" : "text-muted-foreground"}`}>
+                      <span
+                        className={`text-xs ${e?.completedAt ? "text-success" : "text-muted-foreground"}`}
+                      >
                         {e?.completedAt ? `${e.postTestScore}%` : "pendiente"}
                       </span>
                     </div>
@@ -437,7 +585,10 @@ function LogsViewer({ logs }: { logs: InteractionLog[] }) {
           {logs.slice(0, 100).map((l) => (
             <tr key={l.id} className="border-b border-border last:border-0">
               <td className="px-4 py-2.5 text-xs text-muted-foreground">
-                <span className="inline-flex items-center gap-1"><Clock3 className="h-3 w-3" />{new Date(l.timestamp).toLocaleString()}</span>
+                <span className="inline-flex items-center gap-1">
+                  <Clock3 className="h-3 w-3" />
+                  {new Date(l.timestamp).toLocaleString()}
+                </span>
               </td>
               <td className="px-4 py-2.5 font-medium">{l.studentName}</td>
               <td className="px-4 py-2.5">{l.lessonId}</td>

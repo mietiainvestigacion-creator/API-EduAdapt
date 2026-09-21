@@ -1,0 +1,118 @@
+<html xmlns:o='urn:schemas-microsoft-com:office:office' 
+      xmlns:w='urn:schemas-microsoft-com:office:word' 
+      xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+<meta charset="utf-8">
+<title>Pruebas Realizadas - EduAdapt</title>
+<!--[if gte mso 9]>
+<xml>
+<w:WordDocument>
+<w:View>Print</w:View>
+</w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; margin: 2cm; }
+h1 { font-size: 16pt; color: #2c3e50; text-align: center; }
+h2 { font-size: 13pt; color: #34495e; }
+table { border-collapse: collapse; width: 100%; margin-top: 12pt; }
+th { background-color: #2c3e50; color: white; padding: 8pt; text-align: left; font-weight: bold; font-size: 10pt; }
+td { border: 1px solid #bdc3c7; padding: 6pt 8pt; font-size: 10pt; vertical-align: top; }
+tr:nth-child(even) { background-color: #f8f9fa; }
+p { margin: 2pt 0; }
+.footer { margin-top: 20pt; font-size: 9pt; color: #7f8c8d; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>EduAdapt — Agente Pedagógico Inteligente</h1>
+<h2>Pruebas Realizadas</h2>
+
+<table>
+<tr>
+  <th width="5%">#</th>
+  <th width="30%">Caso de prueba</th>
+  <th width="22%">Resultado esperado</th>
+  <th width="22%">Resultado obtenido</th>
+  <th width="21%">Ajustes realizados</th>
+</tr>
+<tr>
+  <td>1</td>
+  <td>Registro de estudiante (nombre, interés, ritmo)</td>
+  <td>El sistema guarda el perfil y avanza al hub</td>
+  <td>Perfil guardado correctamente, redirige al hub de lecciones</td>
+  <td>Ninguno</td>
+</tr>
+<tr>
+  <td>2</td>
+  <td>Visualización de lecciones en el hub</td>
+  <td>Se muestran las lecciones disponibles con su dificultad</td>
+  <td>Lecciones visibles con badges de dificultad y botón "Comenzar"</td>
+  <td>Ninguno</td>
+</tr>
+<tr>
+  <td>3</td>
+  <td>Tutor IA responde al estudiante</td>
+  <td>El tutor saluda, explica el tema y hace una pregunta</td>
+  <td>El tutor responde con mensaje personalizado usando el nombre e interés del estudiante</td>
+  <td>Se corrigió la conexión con la API de Gemini por límites de cuota</td>
+</tr>
+<tr>
+  <td>4</td>
+  <td>Pre-test diagnóstico</td>
+  <td>El estudiante responde y recibe retroalimentación</td>
+  <td>La respuesta se evalúa contra la palabra clave esperada y se muestra resultado</td>
+  <td>Ninguno</td>
+</tr>
+<tr>
+  <td>5</td>
+  <td>Post-test evaluativo</td>
+  <td>El estudiante responde y se calcula puntaje final</td>
+  <td>Puntaje calculado y mostrado en el resumen de la lección</td>
+  <td>Ninguno</td>
+</tr>
+<tr>
+  <td>6</td>
+  <td>Reflexión metacognitiva</td>
+  <td>El estudiante escribe su reflexión y se guarda</td>
+  <td>Reflexión almacenada y asociada al progreso de la lección</td>
+  <td>Ninguno</td>
+</tr>
+<tr>
+  <td>7</td>
+  <td>Decisión adaptativa al finalizar lección</td>
+  <td>El motor sugiere avanzar, repetir o desafío según el desempeño</td>
+  <td>Sugerencia generada correctamente según umbrales de puntaje</td>
+  <td>Ninguno</td>
+</tr>
+<tr>
+  <td>8</td>
+  <td>Panel docente muestra dashboard</td>
+  <td>KPIs, gauges y rendimiento por lección visibles</td>
+  <td>Datos cargados desde el progreso de los estudiantes</td>
+  <td>Ninguno</td>
+</tr>
+<tr>
+  <td>9</td>
+  <td>Docente crea una nueva lección</td>
+  <td>La lección aparece en el listado con los campos ingresados</td>
+  <td>Lección creada y visible en la tabla de lecciones</td>
+  <td>Ninguno</td>
+</tr>
+<tr>
+  <td>10</td>
+  <td>Trazabilidad de interacciones</td>
+  <td>Docente ve el log de mensajes y actividades por estudiante</td>
+  <td>Registro de interacciones visible con tipo, fecha y detalle</td>
+  <td>Ninguno</td>
+</tr>
+</table>
+
+<p style="margin-top:12pt;"><strong>Nota:</strong> Todas las pruebas se realizaron en entorno local con servidor de desarrollo. Los casos 3 y 7 involucran la integración con la API de Google Gemini para el tutor conversacional.</p>
+
+<div class="footer">
+EduAdapt — Universidad de Córdoba — Maestría en Innovación Educativa con Tecnología e IA
+</div>
+
+</body>
+</html>

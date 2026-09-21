@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
-  BookOpen,
+  Sparkles,
   Brain,
   CheckCircle2,
   Gamepad2,
@@ -58,15 +58,27 @@ function StudentPage() {
   );
 
   if (!profile || stage === "onboarding") {
-    return <Onboarding onDone={(p) => { setProfile(p); setStage("hub"); setProgress(store.getProgress(p.name)); }} />;
+    return (
+      <Onboarding
+        onDone={(p) => {
+          setProfile(p);
+          setStage("hub");
+          setProgress(store.getProgress(p.name));
+        }}
+      />
+    );
   }
 
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-10 border-b border-border bg-background/85 backdrop-blur">
         <div className="container mx-auto flex items-center justify-between px-6 py-4">
-          <Link to="/" className="hidden sm:block"><EduLogo /></Link>
-          <Link to="/" className="sm:hidden"><EduLogo withText={false} /></Link>
+          <Link to="/" className="hidden sm:block">
+            <EduLogo />
+          </Link>
+          <Link to="/" className="sm:hidden">
+            <EduLogo withText={false} />
+          </Link>
           <div className="flex items-center gap-3">
             <div className="text-right">
               <div className="text-sm font-semibold">{profile.name}</div>
@@ -75,7 +87,11 @@ function StudentPage() {
               </div>
             </div>
             <button
-              onClick={() => { store.setProfile(null); setProfile(null); setStage("onboarding"); }}
+              onClick={() => {
+                store.setProfile(null);
+                setProfile(null);
+                setStage("onboarding");
+              }}
               className="text-xs text-muted-foreground hover:text-foreground"
             >
               Salir
@@ -90,7 +106,10 @@ function StudentPage() {
             profile={profile}
             lessons={lessons}
             progress={progress}
-            onPick={(id) => { setActiveLessonId(id); setStage("pre-test"); }}
+            onPick={(id) => {
+              setActiveLessonId(id);
+              setStage("pre-test");
+            }}
           />
         )}
         {stage !== "hub" && activeLesson && (
@@ -134,7 +153,9 @@ function Onboarding({ onDone }: { onDone: (p: StudentProfile) => void }) {
   return (
     <div className="min-h-screen bg-background">
       <header className="container mx-auto px-6 py-6">
-        <Link to="/"><EduLogo /></Link>
+        <Link to="/">
+          <EduLogo />
+        </Link>
       </header>
       <main className="container mx-auto flex max-w-2xl flex-col items-center px-6 py-10">
         <div className="w-full">
@@ -162,7 +183,10 @@ function Onboarding({ onDone }: { onDone: (p: StudentProfile) => void }) {
           )}
 
           {step === 1 && (
-            <Card title={`¿Qué te apasiona, ${name}?`} subtitle="Voy a usar esto para crear ejemplos pensados para ti.">
+            <Card
+              title={`¿Qué te apasiona, ${name}?`}
+              subtitle="Voy a usar esto para crear ejemplos pensados para ti."
+            >
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {INTERESTS.map((it) => (
                   <button
@@ -174,7 +198,9 @@ function Onboarding({ onDone }: { onDone: (p: StudentProfile) => void }) {
                         : "border-border bg-card hover:border-primary/40"
                     }`}
                   >
-                    <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${interest === it.value ? "gradient-hero text-white" : "bg-secondary text-primary"}`}>
+                    <span
+                      className={`flex h-12 w-12 items-center justify-center rounded-xl ${interest === it.value ? "gradient-hero text-white" : "bg-secondary text-primary"}`}
+                    >
                       {it.icon}
                     </span>
                     {it.label}
@@ -201,7 +227,9 @@ function Onboarding({ onDone }: { onDone: (p: StudentProfile) => void }) {
                         : "border-border bg-card hover:border-primary/40"
                     }`}
                   >
-                    <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${pace === p.value ? "gradient-hero text-white" : "bg-secondary text-primary"}`}>
+                    <span
+                      className={`flex h-12 w-12 items-center justify-center rounded-xl ${pace === p.value ? "gradient-hero text-white" : "bg-secondary text-primary"}`}
+                    >
                       {p.icon}
                     </span>
                     <div>
@@ -238,9 +266,24 @@ const INTERESTS: { value: Interest; label: string; icon: React.ReactNode }[] = [
 ];
 
 const PACES: { value: Pace; label: string; desc: string; icon: React.ReactNode }[] = [
-  { value: "rapido", label: "Rápido", desc: "Quiero ir al grano y avanzar pronto.", icon: <Zap className="h-5 w-5" /> },
-  { value: "medio", label: "Equilibrado", desc: "Me gusta entender bien antes de avanzar.", icon: <Clock className="h-5 w-5" /> },
-  { value: "reflexivo", label: "Reflexivo", desc: "Prefiero analizar y conectar ideas.", icon: <Sprout className="h-5 w-5" /> },
+  {
+    value: "rapido",
+    label: "Rápido",
+    desc: "Quiero ir al grano y avanzar pronto.",
+    icon: <Zap className="h-5 w-5" />,
+  },
+  {
+    value: "medio",
+    label: "Equilibrado",
+    desc: "Me gusta entender bien antes de avanzar.",
+    icon: <Clock className="h-5 w-5" />,
+  },
+  {
+    value: "reflexivo",
+    label: "Reflexivo",
+    desc: "Prefiero analizar y conectar ideas.",
+    icon: <Sprout className="h-5 w-5" />,
+  },
 ];
 
 // ---------- Hub ----------
@@ -259,48 +302,96 @@ function Hub({
   const completed = Object.values(progress).filter((p) => p.completedAt).length;
   const total = lessons.length;
   const pct = total ? Math.round((completed / total) * 100) : 0;
+  const allDone = total > 0 && completed === total;
 
   return (
     <div>
-      <div className="rounded-3xl gradient-hero p-8 text-white shadow-glow">
-        <div className="text-sm uppercase tracking-widest text-white/80">Tu ruta personalizada</div>
-        <h1 className="mt-2 font-display text-3xl font-bold md:text-4xl">
-          ¡Listo para seguir, {profile.name}! 🚀
-        </h1>
-        <p className="mt-2 max-w-2xl text-white/85">
-          Pensé en ejemplos relacionados con <strong>{profile.interest}</strong> para que cada concepto te
-          haga sentido. Vamos a tu ritmo {profile.pace}.
-        </p>
-        <div className="mt-6 flex items-center gap-4">
-          <div className="flex-1 overflow-hidden rounded-full bg-white/20">
-            <div className="h-2 gradient-accent" style={{ width: `${pct}%` }} />
+      <div className="relative overflow-hidden rounded-3xl gradient-hero p-8 text-white shadow-glow-lg">
+        <div className="orb h-56 w-56 right-[-30px] top-[-40px] bg-white/25" />
+        <div className="orb h-40 w-40 left-1/2 bottom-[-50px] bg-accent/40 animate-float-slow" />
+        <div className="relative">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium capitalize">
+            <Sparkles className="h-3.5 w-3.5" /> {profile.interest} · ritmo {profile.pace}
           </div>
-          <div className="text-sm font-semibold">{completed}/{total} lecciones</div>
+          <h1 className="mt-4 font-display text-3xl font-bold md:text-4xl">
+            {allDone
+              ? `¡Completaste la unidad, ${profile.name}!`
+              : `¡Listo para seguir, ${profile.name}!`}{" "}
+            🚀
+          </h1>
+          <p className="mt-2 max-w-2xl text-white/85">
+            Pensé en ejemplos relacionados con <strong>{profile.interest}</strong> para que cada
+            concepto te haga sentido. Avanzamos a tu ritmo {profile.pace}.
+          </p>
+          <div className="mt-6 flex items-center gap-4">
+            <div className="flex-1 overflow-hidden rounded-full bg-white/20">
+              <div
+                className="h-2.5 rounded-full bg-white transition-[width] duration-700"
+                style={{ width: `${pct}%` }}
+              />
+            </div>
+            <div className="whitespace-nowrap text-sm font-semibold">
+              {completed}/{total} · {pct}%
+            </div>
+          </div>
         </div>
       </div>
 
-      <h2 className="mt-10 mb-4 font-display text-2xl font-bold">Lecciones disponibles</h2>
+      <div className="mt-10 mb-4 flex items-center justify-between">
+        <h2 className="font-display text-2xl font-bold">Tus misiones</h2>
+        <span className="text-sm text-muted-foreground">
+          {completed} completada{completed === 1 ? "" : "s"}
+        </span>
+      </div>
       <div className="grid gap-4 md:grid-cols-2">
-        {lessons.map((l) => {
+        {lessons.map((l, i) => {
           const p = progress[l.id];
           const done = !!p?.completedAt;
+          const started = !!p && !done;
+          const score = p?.postTestScore ?? 0;
+          const accent = DIFF[l.difficulty];
           return (
             <button
               key={l.id}
               onClick={() => onPick(l.id)}
-              className="group text-left rounded-2xl border border-border bg-card p-6 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-glow"
+              className="group animate-rise relative overflow-hidden rounded-2xl border border-border bg-card p-6 text-left shadow-card transition-all hover:-translate-y-1 hover:shadow-glow"
+              style={{ animationDelay: `${i * 0.05}s` }}
             >
-              <div className="mb-3 flex items-center justify-between">
-                <div className={`inline-flex h-10 w-10 items-center justify-center rounded-lg ${done ? "bg-success/15 text-success" : "bg-secondary text-primary"}`}>
-                  {done ? <CheckCircle2 className="h-5 w-5" /> : <BookOpen className="h-5 w-5" />}
+              <div className={`absolute inset-x-0 top-0 h-1 ${done ? "bg-success" : accent.bar}`} />
+              {done && (
+                <div className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-success/15 px-2.5 py-1 text-xs font-semibold text-success">
+                  <CheckCircle2 className="h-3.5 w-3.5" /> Completada
                 </div>
-                <DifficultyBadge level={l.difficulty} />
+              )}
+              <div className="mb-3 flex items-center justify-between">
+                <div
+                  className={`inline-flex h-11 w-11 items-center justify-center rounded-xl font-display text-base font-bold ${done ? "bg-success/15 text-success" : "bg-secondary text-primary transition-colors group-hover:gradient-hero group-hover:text-white"}`}
+                >
+                  {done ? <CheckCircle2 className="h-5 w-5" /> : String(i + 1).padStart(2, "0")}
+                </div>
+                {!done && <DifficultyBadge level={l.difficulty} />}
               </div>
-              <h3 className="font-display text-lg font-semibold">{l.title}</h3>
+              <h3 className="font-display text-lg font-semibold leading-snug">{l.title}</h3>
               <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{l.objective}</p>
-              <div className="mt-4 flex items-center gap-2 text-sm font-medium text-primary">
-                {done ? "Repasar" : "Comenzar"} <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </div>
+
+              {done ? (
+                <div className="mt-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Trophy className="h-4 w-4 text-warning" />
+                    <span className="text-muted-foreground">Resultado</span>
+                    <span className="font-semibold text-foreground">{score}%</span>
+                  </div>
+                  <span className="inline-flex items-center gap-1 text-sm font-medium text-primary">
+                    Repasar{" "}
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </div>
+              ) : (
+                <div className="mt-4 flex items-center gap-2 text-sm font-medium text-primary">
+                  {started ? "Continuar" : "Comenzar"}{" "}
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </div>
+              )}
             </button>
           );
         })}
@@ -314,14 +405,17 @@ function Hub({
   );
 }
 
+const DIFF = {
+  1: { label: "Inicial", cls: "bg-success/15 text-success", bar: "bg-success/60" },
+  2: { label: "Intermedio", cls: "bg-warning/20 text-warning-foreground", bar: "bg-warning/70" },
+  3: { label: "Avanzado", cls: "bg-destructive/15 text-destructive", bar: "bg-destructive/60" },
+} as const;
+
 function DifficultyBadge({ level }: { level: 1 | 2 | 3 }) {
-  const map = {
-    1: { label: "Inicial", cls: "bg-success/15 text-success" },
-    2: { label: "Intermedio", cls: "bg-warning/20 text-warning-foreground" },
-    3: { label: "Avanzado", cls: "bg-destructive/15 text-destructive" },
-  } as const;
-  const v = map[level];
-  return <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${v.cls}`}>{v.label}</span>;
+  const v = DIFF[level];
+  return (
+    <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${v.cls}`}>{v.label}</span>
+  );
 }
 
 // ---------- Lesson Flow ----------
@@ -372,13 +466,15 @@ function LessonFlow({
                 stage === s.key
                   ? "gradient-hero text-white shadow-glow"
                   : stageIndex(stage) > i
-                  ? "bg-success text-success-foreground"
-                  : "bg-secondary text-muted-foreground"
+                    ? "bg-success text-success-foreground"
+                    : "bg-secondary text-muted-foreground"
               }`}
             >
               {i + 1}
             </div>
-            <span className={`hidden text-xs sm:inline ${stage === s.key ? "font-semibold" : "text-muted-foreground"}`}>
+            <span
+              className={`hidden text-xs sm:inline ${stage === s.key ? "font-semibold" : "text-muted-foreground"}`}
+            >
               {s.label}
             </span>
             {i < STAGES.length - 1 && <div className="hidden h-px w-6 bg-border sm:block" />}
@@ -439,7 +535,8 @@ function LessonFlow({
               }}
             />
             <p className="mt-2 text-center text-xs text-muted-foreground">
-              Cuando sientas que ya entendiste, presiona <strong>Terminar lección</strong> para evaluar.
+              Cuando sientas que ya entendiste, presiona <strong>Terminar lección</strong> para
+              evaluar.
             </p>
           </div>
         )}
@@ -509,7 +606,10 @@ function LessonFlow({
                     postTestScore: postScore ?? 0,
                     messagesCount,
                     reflection,
-                    autonomyLevel: Math.min(100, 40 + messagesCount * 8 + (reflection.length > 50 ? 20 : 0)),
+                    autonomyLevel: Math.min(
+                      100,
+                      40 + messagesCount * 8 + (reflection.length > 50 ? 20 : 0),
+                    ),
                     motivation: Math.min(100, 50 + (postScore ?? 0) / 2),
                     difficultyAdjustment:
                       (postScore ?? 0) >= 80 ? 1 : (postScore ?? 0) < 50 ? -1 : 0,
@@ -538,8 +638,11 @@ function LessonFlow({
             preScore={preScore ?? 0}
             postScore={postScore ?? 0}
             onContinue={() => {
-              setPreAnswer(""); setPostAnswer(""); setReflection("");
-              setPreScore(null); setPostScore(null);
+              setPreAnswer("");
+              setPostAnswer("");
+              setReflection("");
+              setPreScore(null);
+              setPostScore(null);
               setStage("hub");
               navigate({ to: "/estudiante" });
             }}
@@ -562,7 +665,11 @@ function Summary({
   preScore,
   postScore,
   onContinue,
-}: { preScore: number; postScore: number; onContinue: () => void }) {
+}: {
+  preScore: number;
+  postScore: number;
+  onContinue: () => void;
+}) {
   const decision = adaptiveDecision({
     lessonId: "",
     startedAt: 0,
@@ -609,7 +716,15 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 // ---------- shared bits ----------
 
-function Card({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
+function Card({
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="rounded-3xl border border-border bg-card p-8 shadow-card">
       <h1 className="font-display text-2xl font-bold md:text-3xl">{title}</h1>
@@ -624,7 +739,12 @@ function StepCard({
   title,
   description,
   children,
-}: { icon: React.ReactNode; title: string; description: string; children: React.ReactNode }) {
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
       <div className="mb-4 flex items-start gap-3">
@@ -656,7 +776,10 @@ function NextButton({ disabled, onClick }: { disabled?: boolean; onClick: () => 
 }
 function BackButton({ onClick }: { onClick: () => void }) {
   return (
-    <button onClick={onClick} className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+    <button
+      onClick={onClick}
+      className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+    >
       <ArrowLeft className="h-4 w-4" /> Atrás
     </button>
   );
