@@ -12,7 +12,16 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as EstudianteRouteImport } from './routes/estudiante'
 import { Route as DocenteRouteImport } from './routes/docente'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DocenteIndexRouteImport } from './routes/docente.index'
+import { Route as DocenteLoginRouteImport } from './routes/docente.login'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiTeacherStudentsRouteImport } from './routes/api/teacher/students'
+import { Route as ApiTeacherLessonsRouteImport } from './routes/api/teacher/lessons'
+import { Route as ApiTeacherDashboardRouteImport } from './routes/api/teacher/dashboard'
+import { Route as ApiTeacherClassesRouteImport } from './routes/api/teacher/classes'
+import { Route as ApiStudentSessionRouteImport } from './routes/api/student/session'
+import { Route as ApiStudentProgressRouteImport } from './routes/api/student/progress'
+import { Route as ApiStudentJoinRouteImport } from './routes/api/student/join'
 
 const EstudianteRoute = EstudianteRouteImport.update({
   id: '/estudiante',
@@ -29,44 +38,161 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocenteIndexRoute = DocenteIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DocenteRoute,
+} as any)
+const DocenteLoginRoute = DocenteLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => DocenteRoute,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiTeacherStudentsRoute = ApiTeacherStudentsRouteImport.update({
+  id: '/api/teacher/students',
+  path: '/api/teacher/students',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTeacherLessonsRoute = ApiTeacherLessonsRouteImport.update({
+  id: '/api/teacher/lessons',
+  path: '/api/teacher/lessons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTeacherDashboardRoute = ApiTeacherDashboardRouteImport.update({
+  id: '/api/teacher/dashboard',
+  path: '/api/teacher/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTeacherClassesRoute = ApiTeacherClassesRouteImport.update({
+  id: '/api/teacher/classes',
+  path: '/api/teacher/classes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStudentSessionRoute = ApiStudentSessionRouteImport.update({
+  id: '/api/student/session',
+  path: '/api/student/session',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStudentProgressRoute = ApiStudentProgressRouteImport.update({
+  id: '/api/student/progress',
+  path: '/api/student/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStudentJoinRoute = ApiStudentJoinRouteImport.update({
+  id: '/api/student/join',
+  path: '/api/student/join',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/docente': typeof DocenteRoute
+  '/docente': typeof DocenteRouteWithChildren
   '/estudiante': typeof EstudianteRoute
   '/api/chat': typeof ApiChatRoute
+  '/docente/login': typeof DocenteLoginRoute
+  '/docente/': typeof DocenteIndexRoute
+  '/api/student/join': typeof ApiStudentJoinRoute
+  '/api/student/progress': typeof ApiStudentProgressRoute
+  '/api/student/session': typeof ApiStudentSessionRoute
+  '/api/teacher/classes': typeof ApiTeacherClassesRoute
+  '/api/teacher/dashboard': typeof ApiTeacherDashboardRoute
+  '/api/teacher/lessons': typeof ApiTeacherLessonsRoute
+  '/api/teacher/students': typeof ApiTeacherStudentsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/docente': typeof DocenteRoute
   '/estudiante': typeof EstudianteRoute
   '/api/chat': typeof ApiChatRoute
+  '/docente/login': typeof DocenteLoginRoute
+  '/docente': typeof DocenteIndexRoute
+  '/api/student/join': typeof ApiStudentJoinRoute
+  '/api/student/progress': typeof ApiStudentProgressRoute
+  '/api/student/session': typeof ApiStudentSessionRoute
+  '/api/teacher/classes': typeof ApiTeacherClassesRoute
+  '/api/teacher/dashboard': typeof ApiTeacherDashboardRoute
+  '/api/teacher/lessons': typeof ApiTeacherLessonsRoute
+  '/api/teacher/students': typeof ApiTeacherStudentsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/docente': typeof DocenteRoute
+  '/docente': typeof DocenteRouteWithChildren
   '/estudiante': typeof EstudianteRoute
   '/api/chat': typeof ApiChatRoute
+  '/docente/login': typeof DocenteLoginRoute
+  '/docente/': typeof DocenteIndexRoute
+  '/api/student/join': typeof ApiStudentJoinRoute
+  '/api/student/progress': typeof ApiStudentProgressRoute
+  '/api/student/session': typeof ApiStudentSessionRoute
+  '/api/teacher/classes': typeof ApiTeacherClassesRoute
+  '/api/teacher/dashboard': typeof ApiTeacherDashboardRoute
+  '/api/teacher/lessons': typeof ApiTeacherLessonsRoute
+  '/api/teacher/students': typeof ApiTeacherStudentsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/docente' | '/estudiante' | '/api/chat'
+  fullPaths:
+    | '/'
+    | '/docente'
+    | '/estudiante'
+    | '/api/chat'
+    | '/docente/login'
+    | '/docente/'
+    | '/api/student/join'
+    | '/api/student/progress'
+    | '/api/student/session'
+    | '/api/teacher/classes'
+    | '/api/teacher/dashboard'
+    | '/api/teacher/lessons'
+    | '/api/teacher/students'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/docente' | '/estudiante' | '/api/chat'
-  id: '__root__' | '/' | '/docente' | '/estudiante' | '/api/chat'
+  to:
+    | '/'
+    | '/estudiante'
+    | '/api/chat'
+    | '/docente/login'
+    | '/docente'
+    | '/api/student/join'
+    | '/api/student/progress'
+    | '/api/student/session'
+    | '/api/teacher/classes'
+    | '/api/teacher/dashboard'
+    | '/api/teacher/lessons'
+    | '/api/teacher/students'
+  id:
+    | '__root__'
+    | '/'
+    | '/docente'
+    | '/estudiante'
+    | '/api/chat'
+    | '/docente/login'
+    | '/docente/'
+    | '/api/student/join'
+    | '/api/student/progress'
+    | '/api/student/session'
+    | '/api/teacher/classes'
+    | '/api/teacher/dashboard'
+    | '/api/teacher/lessons'
+    | '/api/teacher/students'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DocenteRoute: typeof DocenteRoute
+  DocenteRoute: typeof DocenteRouteWithChildren
   EstudianteRoute: typeof EstudianteRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiStudentJoinRoute: typeof ApiStudentJoinRoute
+  ApiStudentProgressRoute: typeof ApiStudentProgressRoute
+  ApiStudentSessionRoute: typeof ApiStudentSessionRoute
+  ApiTeacherClassesRoute: typeof ApiTeacherClassesRoute
+  ApiTeacherDashboardRoute: typeof ApiTeacherDashboardRoute
+  ApiTeacherLessonsRoute: typeof ApiTeacherLessonsRoute
+  ApiTeacherStudentsRoute: typeof ApiTeacherStudentsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -92,6 +218,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docente/': {
+      id: '/docente/'
+      path: '/'
+      fullPath: '/docente/'
+      preLoaderRoute: typeof DocenteIndexRouteImport
+      parentRoute: typeof DocenteRoute
+    }
+    '/docente/login': {
+      id: '/docente/login'
+      path: '/login'
+      fullPath: '/docente/login'
+      preLoaderRoute: typeof DocenteLoginRouteImport
+      parentRoute: typeof DocenteRoute
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -99,14 +239,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/teacher/students': {
+      id: '/api/teacher/students'
+      path: '/api/teacher/students'
+      fullPath: '/api/teacher/students'
+      preLoaderRoute: typeof ApiTeacherStudentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/teacher/lessons': {
+      id: '/api/teacher/lessons'
+      path: '/api/teacher/lessons'
+      fullPath: '/api/teacher/lessons'
+      preLoaderRoute: typeof ApiTeacherLessonsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/teacher/dashboard': {
+      id: '/api/teacher/dashboard'
+      path: '/api/teacher/dashboard'
+      fullPath: '/api/teacher/dashboard'
+      preLoaderRoute: typeof ApiTeacherDashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/teacher/classes': {
+      id: '/api/teacher/classes'
+      path: '/api/teacher/classes'
+      fullPath: '/api/teacher/classes'
+      preLoaderRoute: typeof ApiTeacherClassesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/student/session': {
+      id: '/api/student/session'
+      path: '/api/student/session'
+      fullPath: '/api/student/session'
+      preLoaderRoute: typeof ApiStudentSessionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/student/progress': {
+      id: '/api/student/progress'
+      path: '/api/student/progress'
+      fullPath: '/api/student/progress'
+      preLoaderRoute: typeof ApiStudentProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/student/join': {
+      id: '/api/student/join'
+      path: '/api/student/join'
+      fullPath: '/api/student/join'
+      preLoaderRoute: typeof ApiStudentJoinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface DocenteRouteChildren {
+  DocenteLoginRoute: typeof DocenteLoginRoute
+  DocenteIndexRoute: typeof DocenteIndexRoute
+}
+
+const DocenteRouteChildren: DocenteRouteChildren = {
+  DocenteLoginRoute: DocenteLoginRoute,
+  DocenteIndexRoute: DocenteIndexRoute,
+}
+
+const DocenteRouteWithChildren =
+  DocenteRoute._addFileChildren(DocenteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DocenteRoute: DocenteRoute,
+  DocenteRoute: DocenteRouteWithChildren,
   EstudianteRoute: EstudianteRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiStudentJoinRoute: ApiStudentJoinRoute,
+  ApiStudentProgressRoute: ApiStudentProgressRoute,
+  ApiStudentSessionRoute: ApiStudentSessionRoute,
+  ApiTeacherClassesRoute: ApiTeacherClassesRoute,
+  ApiTeacherDashboardRoute: ApiTeacherDashboardRoute,
+  ApiTeacherLessonsRoute: ApiTeacherLessonsRoute,
+  ApiTeacherStudentsRoute: ApiTeacherStudentsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

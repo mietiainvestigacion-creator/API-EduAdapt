@@ -1,123 +1,75 @@
-# EduAdapt — Agente Pedagógico Inteligente
+# EduAdapt — Tutor pedagógico con IA
 
-**EduAdapt** es un tutor cognitivo adaptativo impulsado por IA para estudiantes de **Grado 7°** (11-13 años) en el área de **Tecnología e Informática** del Colegio Los Sauces (Caucasia, Antioquia, Colombia).
+Tutor adaptativo para Grado 7° (Tecnología e Informática). Docentes gestionan clases en Supabase; estudiantes entran anónimos con código de clase + código Explora-TIC.
 
-Proyecto de la **Universidad de Córdoba** — Maestría en Innovación Educativa con Tecnología e IA.
-
-## Demo
-
-🔗 [https://robo-mind-mentor.lovable.app/](https://robo-mind-mentor.lovable.app/)
-
-## Stack Tecnológico
+## Stack
 
 | Capa | Tecnología |
-|------|-----------|
-| **Framework** | [TanStack Start](https://tanstack.com/start/latest) (SSR) + React 19 |
-| **Lenguaje** | TypeScript 5.8 |
-| **Runtime** | Bun (local) / Cloudflare Workers (producción) |
-| **AI SDK** | [Vercel AI SDK](https://sdk.vercel.ai/) v6 + [Google Gemini 2.0 Flash](https://ai.google.dev/) |
-| **UI** | Tailwind CSS v4 + shadcn/ui + Radix Primitives |
-| **Iconos** | Lucide React |
-| **Gráficos** | Recharts |
-| **Forms** | React Hook Form + Zod |
-| **Base de datos** | Supabase (cliente JS) + localStorage (caching) |
-| **Despliegue** | Cloudflare Workers + Vite |
-| **Paquete** | Bun |
+|------|------------|
+| Framework | TanStack Start + React 19 |
+| Runtime | Bun (local) / Cloudflare Workers |
+| IA | Vercel AI SDK + Google Gemini 3.6 Flash |
+| Datos | Supabase (Auth docentes + Postgres) |
+| UI | Tailwind CSS v4 |
 
-## Arquitectura
-
-### Multiagente
-
-| Agente | Función |
-|--------|---------|
-| 🧠 Tutor Cognitivo Adaptativo | Acompaña, modela y consolida aprendizajes |
-| 🧭 Diagnóstico Psicopedagógico | Detecta intereses, ritmos y preferencias |
-| ✨ Diseñador de Rutas | Genera trayectorias únicas por estudiante |
-| 🤔 Mediador Socrático | Pregunta, no responde. Fomenta el razonamiento |
-| 📊 Evaluador Formativo | Pre y post test con feedback inmediato |
-| 🛡️ Gobernador Ético | Mantiene límites curriculares y privacidad |
-
-### Principios Pedagógicos
-
-- **DUA** (Diseño Universal para el Aprendizaje)
-- **Mediación Socrática**: preguntas guía, nunca respuestas directas
-- **Hiperpersonalización**: ejemplos anclados al interés del estudiante
-- **Andamiaje progresivo**: pistas concretas si falla, profundización si acierta
-- **Agencia epistémica**: el estudiante justifica con sus propias palabras
-- **Retroalimentación formativa**: celebra avances, reformula errores como oportunidad
-- **Metacognición**: reflexión sobre el propio proceso de aprendizaje
-
-## Funcionalidades
-
-### Estudiante (`/estudiante`)
-
-1. **Onboarding** (3 pasos): nombre, interés (videojuegos, deportes, música, arte, ciencia) y ritmo (rápido, medio, reflexivo)
-2. **Hub** con lecciones, barra de progreso y badges de dificultad
-3. **Flujo de aprendizaje**:
-   - Pre-test diagnóstico
-   - Tutor IA conversacional (mediación socrática)
-   - Post-test evaluativo
-   - Reflexión metacognitiva
-   - Resumen adaptativo (avanzar / repetir / desafío)
-4. **Chat con IA**: streaming en tiempo real con contexto del perfil del estudiante
-
-### Docente (`/docente`)
-
-1. **Dashboard**: KPIs, gauges de motivación/autonomía/dominio, rendimiento por lección
-2. **Lecciones**: CRUD completo, activar/desactivar, restaurar predeterminadas
-3. **Estudiantes**: vista por estudiante con scores, autonomía y motivación
-4. **Trazabilidad**: log completo de interacciones (últimas 100)
-
-## Lecciones Incluidas
-
-| Lección | Dificultad | Estado |
-|---------|-----------|--------|
-| Hardware: CPU y memoria | Inicial | ✅ Activada |
-| Pensamiento algorítmico | Intermedio | ✅ Activada |
-| Redes e Internet | Intermedio | ✅ Activada |
-| Seguridad digital | Inicial | ❌ Desactivada |
-
-## Getting Started
+## Arranque local
 
 ```bash
-# Instalar dependencias
 bun install
+cp .env.example .env
+# Completa SUPABASE_* y GOOGLE_GENERATIVE_AI_API_KEY
+# Para el cliente también VITE_SUPABASE_URL y VITE_SUPABASE_PUBLISHABLE_KEY
 
-# Configurar variables de entorno
-cp .env.example .env  # o editar .env directamente
+# Aplica migraciones en tu proyecto Supabase (SQL editor o CLI):
+#   supabase/migrations/001_init.sql
+#   supabase/migrations/002_seed_lessons.sql
+#   supabase/migrations/003_anonymous_codes_and_tutor_profile.sql
 
-# Variables requeridas:
-# GOOGLE_GENERATIVE_AI_API_KEY=<gemini-api-key>
-# SUPABASE_URL=<url>
-# SUPABASE_PUBLISHABLE_KEY=<key>
-
-# Iniciar servidor de desarrollo
 bun run dev
 ```
 
-## Pruebas Realizadas
+## Roles
 
-| # | Caso de prueba | Resultado esperado | Resultado obtenido | Ajustes realizados |
-|---|---------------|-------------------|-------------------|-------------------|
-| 1 | Registro de estudiante (nombre, interés, ritmo) | El sistema guarda el perfil y avanza al hub | Perfil guardado correctamente, redirige al hub de lecciones | Ninguno |
-| 2 | Visualización de lecciones en el hub | Se muestran las lecciones disponibles con su dificultad | Lecciones visibles con badges de dificultad y botón "Comenzar" | Ninguno |
-| 3 | Tutor IA responde al estudiante | El tutor saluda, explica el tema y hace una pregunta | El tutor responde con mensaje personalizado usando el nombre e interés del estudiante | Se corrigió la conexión con la API de Gemini por límites de cuota |
-| 4 | Pre-test diagnóstico | El estudiante responde y recibe retroalimentación | La respuesta se evalúa contra la palabra clave esperada y se muestra resultado | Ninguno |
-| 5 | Post-test evaluativo | El estudiante responde y se calcula puntaje final | Puntaje calculado y mostrado en el resumen de la lección | Ninguno |
-| 6 | Reflexión metacognitiva | El estudiante escribe su reflexión y se guarda | Reflexión almacenada y asociada al progreso de la lección | Ninguno |
-| 7 | Decisión adaptativa al finalizar lección | El motor sugiere avanzar, repetir o desafío según el desempeño | Sugerencia generada correctamente según umbrales de puntaje | Ninguno |
-| 8 | Panel docente muestra dashboard | KPIs, gauges y rendimiento por lección visibles | Datos cargados desde el progreso de los estudiantes | Ninguno |
-| 9 | Docente crea una nueva lección | La lección aparece en el listado con los campos ingresados | Lección creada y visible en la tabla de lecciones | Ninguno |
-| 10 | Trazabilidad de interacciones | Docente ve el log de mensajes y actividades por estudiante | Registro de interacciones visible con tipo, fecha y detalle | Ninguno |
+1. **Docente** → `/docente/login`
+   - Crea clase, copia `join_code`, carga **códigos anónimos** (Explora-TIC: 003, 014…), pega el **perfil pedagógico** por código, activa lecciones.
+2. **Estudiante** → `/estudiante`
+   - Código de clase + código de estudiante → lecciones + chat.
+   - El tutor recibe el prompt maestro + el párrafo de perfil de ese código (en cada mensaje).
+
+## Migraciones Supabase
+
+Ejecuta en orden en el SQL Editor:
+
+1. `001_init.sql`
+2. `002_seed_lessons.sql`
+3. `003_anonymous_codes_and_tutor_profile.sql`
+
+## Estructura
+
+```
+src/
+  routes/           # shells + API handlers
+  features/         # UI estudiante / docente
+  server/           # auth, db, ai (solo servidor)
+  shared/           # tipos, utils, componentes compartidos
+supabase/migrations/
+```
+
+## Variables
+
+Ver `.env.example` y `.dev.vars.example`. Nunca subas `.env` ni la service role key.
 
 ## Scripts
 
 | Comando | Descripción |
 |---------|-------------|
-| `bun run dev` | Servidor de desarrollo |
+| `bun run dev` | Desarrollo |
 | `bun run build` | Build producción |
 | `bun run lint` | ESLint |
-| `bun run format` | Prettier |
+
+## Producción (Cloudflare)
+
+Configura secretos Wrangler: `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `GOOGLE_GENERATIVE_AI_API_KEY`. Las `VITE_*` se inyectan en el build.
 
 ## Licencia
 

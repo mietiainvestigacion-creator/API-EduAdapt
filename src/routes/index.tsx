@@ -16,7 +16,7 @@ import {
   GitCompare,
   ArrowRight,
 } from "lucide-react";
-import { EduLogo } from "@/components/EduLogo";
+import { EduLogo } from "@/shared/components/EduLogo";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -107,7 +107,7 @@ function Landing() {
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
-                to="/docente"
+                to="/docente/login"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-border glass px-7 py-4 text-base font-semibold text-foreground shadow-card transition-colors hover:bg-secondary sm:w-auto"
               >
                 <Users className="h-5 w-5" />
@@ -207,10 +207,11 @@ function Landing() {
           <section id="agentes" className="container mx-auto px-6 py-16">
             <div className="mb-12 text-center">
               <h2 className="font-display text-3xl font-bold md:text-4xl">
-                Arquitectura multiagente
+                Roles pedagógicos del tutor
               </h2>
               <p className="mt-3 text-muted-foreground">
-                Cada agente con una función pedagógica diferenciada.
+                Un solo tutor con IA que combina estas funciones en el prompt (no son servicios
+                separados).
               </p>
             </div>
             <div className="grid gap-4 md:grid-cols-3">

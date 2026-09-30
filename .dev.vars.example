@@ -1,0 +1,5 @@
+# Copy to .dev.vars for local Cloudflare/Vite server secrets (gitignored)
+SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+SUPABASE_PUBLISHABLE_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+GOOGLE_GENERATIVE_AI_API_KEY=your-gemini-api-key
